@@ -3,9 +3,9 @@ import Navbar from '@/app/components/Navbar';
 import Button from "@/app/components/Button";
 import axios from "axios"
 
-const Product = async () => {
+const Product = async (props: any) => {
 
-    // TODO: get the product id
+    const productId = props.params.productId
 
     const res = await axios.get(`https://fakestoreapi.com/products/${productId}`)
     const product = await res.data
@@ -36,3 +36,31 @@ const Product = async () => {
 }
 
 export default Product
+
+export async function generateMetadata(props: any) {
+
+    const productId = props.params.productId
+
+    const res = await axios.get(`https://fakestoreapi.com/products/${productId}`)
+    const product = await res.data
+
+
+    return {
+        title: product.title,
+        description: product.description,
+        openGraph: {
+            title: product.title,
+            description: product.description,
+            images: [
+                {
+                    url: product.image,
+                    width: 800,
+                    height: 600,
+                    alt: product.title,
+                    type: 'image/jpeg',
+                }
+            ]
+        }
+    }
+
+}
